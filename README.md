@@ -1,2 +1,4 @@
-# Aantekeningen Week 1
-https://drive.google.com/drive/folders/1ABavjeWWdwjlNSC-R-KEmA-I9dpU6VlV
+# Embedded systems 1
+### Git repository onderhouden door: Melvin Moes, 500905603
+![alt text](assets\pictures\melvin.jpg)
+
