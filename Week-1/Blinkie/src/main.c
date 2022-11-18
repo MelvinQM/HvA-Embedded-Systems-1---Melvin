@@ -5,8 +5,6 @@
 
 //Defining the Led Pin 
 #define LED_PIN 21
-#define HIGH 1
-#define LOW 0
 
 //Main code
 void app_main() {
