@@ -1,4 +1,2 @@
-# Embedded systems 1 Documenatie
+![alt text](assets\pictures\em1_markdown_header.png)
 ### Git repository onderhouden door: Melvin Moes, 500905603
-![alt text](assets\pictures\melvin.jpg)
-
