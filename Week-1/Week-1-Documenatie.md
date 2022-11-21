@@ -1,7 +1,8 @@
 ## Blinkie opdracht 1
 ## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
 
-`//Importing gpio drivers
+```
+//Importing gpio drivers
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -19,6 +20,7 @@ void app_main() {
     vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
     //Turning Led off
     gpio_set_level(LED_PIN, LOW);
-}`
+}
+```
 
 
