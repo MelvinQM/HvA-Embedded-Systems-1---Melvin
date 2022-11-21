@@ -1,4 +1,4 @@
-![Embedded Systems 1](../assets/em1_markdown_header.png)
+![Embedded Systems 1](../assets/pictures/em1_markdown_header.png)
 
 # Lab week 2
 
