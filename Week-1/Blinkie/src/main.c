@@ -4,7 +4,7 @@
 #include "driver/gpio.h"
 
 //Defining the Led Pin 
-#define LED_PIN 21
+#define LED_PIN 16
 #define HIGH 1
 #define LOW 0
 
@@ -12,10 +12,15 @@
 void app_main() {
     //Setting power direction
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
+    
+    while (true){
     //Turning Led on
     gpio_set_level(LED_PIN, HIGH);
     //Adding a delay between turning the Led on and off
     vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
     //Turning Led off
     gpio_set_level(LED_PIN, LOW);
+    //Adding delay after turning it off
+    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
+    }  
 }
