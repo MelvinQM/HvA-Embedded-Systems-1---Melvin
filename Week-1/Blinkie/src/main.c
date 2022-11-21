@@ -14,13 +14,17 @@ void app_main() {
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
     
     while (true){
-    //Turning Led on
+    //Turning Led on and off in quick succession
     gpio_set_level(LED_PIN, HIGH);
-    //Adding a delay between turning the Led on and off
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
+    vTaskDelay(100 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
+    gpio_set_level(LED_PIN, LOW);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+    gpio_set_level(LED_PIN, HIGH);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+    
     //Turning Led off
     gpio_set_level(LED_PIN, LOW);
     //Adding delay after turning it off
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
     }  
 }
