@@ -1,4 +1,4 @@
-![alt text](../em1-moesmq/assets/pictures/em1_markdown_header.png)
+![alt text](assets\pictures\em1_markdown_header.png)
 ### Git repository onderhouden door: Melvin Moes, 500905603
 ### Embedded Kit
 
