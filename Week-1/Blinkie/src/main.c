@@ -7,6 +7,8 @@
 #define LED_PIN 16
 #define HIGH 1
 #define LOW 0
+#define DELAY 1000 // 1000 milliseconde = 1 seconde
+#define SMALL_DELAY 100
 
 //Main code
 void app_main() {
@@ -16,15 +18,15 @@ void app_main() {
     while (true){
     //Turning Led on and off in quick succession
     gpio_set_level(LED_PIN, HIGH);
-    vTaskDelay(100 / portTICK_PERIOD_MS); // 1000 milliseconde = 1 seconde
+    vTaskDelay(SMALL_DELAY / portTICK_PERIOD_MS); 
     gpio_set_level(LED_PIN, LOW);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(SMALL_DELAY / portTICK_PERIOD_MS);
     gpio_set_level(LED_PIN, HIGH);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(SMALL_DELAY / portTICK_PERIOD_MS);
     
     //Turning Led off
     gpio_set_level(LED_PIN, LOW);
     //Adding delay after turning it off
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(DELAY / portTICK_PERIOD_MS);
     }  
 }
