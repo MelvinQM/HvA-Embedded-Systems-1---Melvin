@@ -35,6 +35,7 @@ void app_main() {
     }  
 }
 ```
+## Week 1 vragen
 - Wat is het verschil tussen software en firmware?
 >Firmware is software dat ingebakken staat in hardware.
 - Wat is een microcontroller?
