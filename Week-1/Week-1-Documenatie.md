@@ -33,7 +33,7 @@ void app_main() {
 - Wat verstaan wij onder Internet of Things, wat zie je hiervan hedendaags?
 >Het verbinden van steeds meer apparaten aan het internet.
 - Hoe zit het met de 'sjoemelsoftware' wat in 2015 ontdekt werd bij onder andere Volkswagen?
->
+>Software die gebruikt wordt om testresultaten te beïnvloeden van een elektronisch apparaat of machine. Dit is vaak in het voordeel van de makers van deze software. Dit werd door volkwswagen gebruikt om de testen die auto's moesten volgen nepresultaten kregen. Zodat ze weg konde komen met in principe fraude.
 - Waarvoor dient het besturingssysteem? Wat voor besturingssysteem draai jij op je PC? En op je ESP32? Op je Odroid?
 >Op mijn computer draai ik windows 11. De esp32 draait op linux. Deze systemen zijn er om het apparaat te kunnen laten werken.
 - Wat is nou een Embedded Systeem? Wat is kenmerkend voor een Embedded Systeem?
@@ -53,6 +53,7 @@ void app_main() {
 - Waarom schrijf je software voor een Embedded Systeem vaak niet op het apparaat zelf?
 >Omdat werken op een embedded system is vaak veel ingewikkelder is door geen 
 - Wat zijn de (technische) specificaties van jouw Embedded Boardje?
+>The ESP32-S3-DevKitC-1 is an entry-level development board equipped with ESP32-S3-WROOM-1, ESP32-S3-WROOM-1U, or ESP32-S3-WROOM-2, a general-purpose Wi-Fi + Bluetooth® LE MCU module that integrates complete Wi-Fi and Bluetooth LE functions.
 - Wat is het verschil tussen interpreteren en compileren?
 >Interpreteren is de hele code omzetten regel per regel naar te lezen instructies voor het systeem. Compileren doet in principe hetzelfde alleen doet deze de hele code en slaat dit vervolgens op zodat het systeem het volgende keer meteen kan gebruiken. 
 - Beschrijf globaal de werking van een computersysteem.
