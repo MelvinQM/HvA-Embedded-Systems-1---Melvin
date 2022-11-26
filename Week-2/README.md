@@ -52,7 +52,7 @@ void app_main() {
 }  
 ```
 ![alt text](assets/pictures/binairteller.png)
-![alt text](assets/pictures/binaitellerGIF.mp4)
+![Ontwerp Eindproduct.gif](assets/pictures/binairtellerGIF.gif)
 ## Week 2 vragen
 
 
