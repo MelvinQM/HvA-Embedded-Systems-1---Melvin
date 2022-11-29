@@ -8,7 +8,7 @@ Binary counting program with leds
 #include "freertos/task.h"
 #include "driver/gpio.h"
 
-//Defining the Led Pin 
+//Defining the Led Pins
 int LED_PIN[10] = {4, 5, 6, 7, 15, 16, 3, 46, 9, 10};
 #define HIGH 1
 #define LOW 0
@@ -18,7 +18,7 @@ int LED_PIN[10] = {4, 5, 6, 7, 15, 16, 3, 46, 9, 10};
 void app_main() {
     //Max number it can count to using 10 leds
     int maxWaarde = 1024;
-
+    
     //Setting power direction for every single led
     for (size_t i = 0; i < 10; i++)
     {
@@ -30,7 +30,8 @@ void app_main() {
     {
         for (size_t i = 0; i < 10; i++)
         {
-            //Checking every position in the 10 byte long number if the placement is a number higher than 0 led turns on
+            //Checking every position in the 10 bit long number if the placement is a number higher than 0 led turns on
+            //bitshifting 1, i amount of times. Then comparing with X
             if (((1 << i) & x) >= 1)
             {
                 printf("1");

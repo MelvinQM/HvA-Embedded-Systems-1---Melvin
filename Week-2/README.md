@@ -53,6 +53,13 @@ void app_main() {
 ```
 ![alt text](assets/pictures/binairteller.png)
 ## Week 2 vragen
-
+- Schrijf de decimale waarde 127 in binair en hexadecimaal (zonder rekenmachine).
+> Binair: "1111111" 1+2+4+8+16+64+32=96=127 Hexadecimaal: "7f" 127/16 = 7 rest is 15=f
+- Zet het decimale getal -24 om in de binaire waarde, schrijf deze op in de vorm van 8-bit two's complement.
+> "11000" = 24 (FLIP en 1 bijvoegen) = "100011"
+- Wat zijn de verschillende representaties voor decimale, binaire en hexadecimale getallen? Hoe gebruik je deze in C?
+> Ze hebben allemaal een ander grondgetal namelijk decimaal(10) binair(2) hexadecimaal(16)
+- Beschrijf de werking van een flipflopschakeling, waarom is deze zo belangrijk voor computersystemen?
+> 
 
 
