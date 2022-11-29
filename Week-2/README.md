@@ -2,55 +2,55 @@
 ## Binair Led bar teller opdracht 2
 ## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
 
-```
-/*
-Melvin Moes
-24-11-2022
-Binary counting program with leds
-*/
-//Importing gpio drivers
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "driver/gpio.h"
 
-//Defining the Led Pin 
-int LED_PIN[10] = {4, 5, 6, 7, 15, 16, 3, 46, 9, 10};
-#define HIGH 1
-#define LOW 0
-#define DELAY 1000 // 1000 milliseconde = 1 seconde
+    /*
+    Melvin Moes
+    24-11-2022
+    Binary counting program with leds
+    */
+    //Importing gpio drivers
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+    #include "driver/gpio.h"
 
-//Main code
-void app_main() {
-    //Max number it can count to using 10 leds
-    int maxWaarde = 1024;
+    //Defining the Led Pin 
+    int LED_PIN[10] = {4, 5, 6, 7, 15, 16, 3, 46, 9, 10};
+    #define HIGH 1
+    #define LOW 0
+    #define DELAY 1000 // 1000 milliseconde = 1 seconde
 
-    //Setting power direction for every single led
-    for (size_t i = 0; i < 10; i++)
-    {
-        gpio_set_direction(LED_PIN[i], GPIO_MODE_OUTPUT);
-    }
+    //Main code
+    void app_main() {
+        //Max number it can count to using 10 leds
+        int maxWaarde = 1024;
 
-    //Counting in binary using byte shifting
-    for (size_t x = 0; x < maxWaarde; x++)
-    {
+        //Setting power direction for every single led
         for (size_t i = 0; i < 10; i++)
         {
-            //Checking every position in the 10 byte long number if the placement is a number higher than 0 led turns on
-            if (((1 << i) & x) >= 1)
-            {
-                printf("1");
-                gpio_set_level(LED_PIN[i], HIGH);
-            } else {
-                printf("0");
-                gpio_set_level(LED_PIN[i], LOW);
-            }
+            gpio_set_direction(LED_PIN[i], GPIO_MODE_OUTPUT);
         }
-        printf("\n");
-        //Adding a delay for the count
-        vTaskDelay(DELAY / portTICK_PERIOD_MS);
-    }
-}  
-```
+
+        //Counting in binary using byte shifting
+        for (size_t x = 0; x < maxWaarde; x++)
+        {
+            for (size_t i = 0; i < 10; i++)
+            {
+                //Checking every position in the 10 byte long number if the placement is a number higher than 0 led turns on
+                if (((1 << i) & x) >= 1)
+                {
+                    printf("1");
+                    gpio_set_level(LED_PIN[i], HIGH);
+                } else {
+                    printf("0");
+                    gpio_set_level(LED_PIN[i], LOW);
+                }
+            }
+            printf("\n");
+            //Adding a delay for the count
+            vTaskDelay(DELAY / portTICK_PERIOD_MS);
+        }
+    }  
+
 ![alt text](assets/pictures/binairteller.png)
 ## Week 2 vragen
 - Schrijf de decimale waarde 127 in binair en hexadecimaal (zonder rekenmachine).
