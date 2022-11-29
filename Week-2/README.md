@@ -1,5 +1,5 @@
 ![alt text](assets/pictures/em1_markdown_header.png)
-## Blinkie opdracht 1
+## Binair Led bar teller opdracht 2
 ## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
 
 ```
