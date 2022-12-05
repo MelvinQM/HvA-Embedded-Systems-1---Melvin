@@ -52,6 +52,7 @@
     }  
 
 ![alt text](assets/pictures/binairteller.png)
+![alt text](assets/pictures/binair_schema.png)
 ## Week 2 vragen
 - Schrijf de decimale waarde 127 in binair en hexadecimaal (zonder rekenmachine).
 > Binair: "1111111" 1+2+4+8+16+64+32=96=127 Hexadecimaal: "7f" 127/16 = 7 rest is 15=f

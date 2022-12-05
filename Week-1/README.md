@@ -37,6 +37,7 @@
     }
 
 ![alt text](assets/pictures/hartslag.png)
+![alt text](assets/pictures/blinkie_schema.png)
 ## Week 1 vragen
 - Wat is het verschil tussen software en firmware?
 >Firmware is software dat ingebakken staat in hardware.
