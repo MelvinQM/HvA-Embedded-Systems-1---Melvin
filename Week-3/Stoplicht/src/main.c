@@ -1,3 +1,8 @@
+/*
+Melvin Moes
+06-12-2022
+Stoplicht simuleren met 3 leds
+*/
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"

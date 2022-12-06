@@ -1,7 +1,8 @@
-![alt text](assets/pictures/em1_markdown_header.png)
-## Binair Led bar teller opdracht 2
-## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
+# ![alt text](assets/pictures/em1_markdown_header.png)
 
+## Binair Led bar teller opdracht 2
+
+## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
 
     /*
     Melvin Moes
@@ -51,16 +52,24 @@
         }
     }  
 
+![alt text](assets/pictures/binairGIF.gif)
 ![alt text](assets/pictures/binairteller.png)
 ![alt text](assets/pictures/binair_schema.png)
+![alt text](assets/pictures/binair_schema_knop.png)
+
 ## Week 2 vragen
+
 - Schrijf de decimale waarde 127 in binair en hexadecimaal (zonder rekenmachine).
+
 > Binair: "1111111" 1+2+4+8+16+64+32=96=127 Hexadecimaal: "7f" 127/16 = 7 rest is 15=f
+
 - Zet het decimale getal -24 om in de binaire waarde, schrijf deze op in de vorm van 8-bit two's complement.
+
 > "11000" = 24 (FLIP en 1 bijvoegen) = "100011"
+
 - Wat zijn de verschillende representaties voor decimale, binaire en hexadecimale getallen? Hoe gebruik je deze in C?
+
 > Ze hebben allemaal een ander grondgetal namelijk decimaal(10) binair(2) hexadecimaal(16)
+
 - Beschrijf de werking van een flipflopschakeling, waarom is deze zo belangrijk voor computersystemen?
 > 
-
-
