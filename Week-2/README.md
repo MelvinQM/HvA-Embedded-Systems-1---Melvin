@@ -52,7 +52,7 @@
         }
     }  
 
-![alt text](assets/gifs/binairGIF.gif)
+![alt text](assets/gifs/binairtellerGIF.gif)
 ![alt text](assets/pictures/binair_schema.png)
 ![alt text](assets/pictures/binair_foto_knop.png)
 ![alt text](assets/pictures/binair_schema_knop.png)
