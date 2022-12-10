@@ -49,39 +49,46 @@ static void example_ledc_init(void)
     };
     ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
 }
+
+void reset(int LED1, int LED2, int LED3) {
+    gpio_set_level(LED1, LOW);
+    gpio_set_level(LED2, LOW);
+    gpio_set_level(LED3, LOW);
+}
+
 void app_main() {
     example_ledc_init();
+    reset(LEDC_OUTPUT_IO_R, LEDC_OUTPUT_IO_Y, LEDC_OUTPUT_IO_G);
 
     gpio_set_direction(LEDC_OUTPUT_IO_R, GPIO_MODE_OUTPUT);
     gpio_set_direction(LEDC_OUTPUT_IO_Y, GPIO_MODE_OUTPUT);
     gpio_set_direction(LEDC_OUTPUT_IO_G, GPIO_MODE_OUTPUT);
 
-    char command[4];  // Use an array to store the user input
-    while (){
+    int CMD_1 = 0x01;
+    int CMD_2 = 0x02;
+    int CMD_3 = 0x03;
+    int CMD_A = 0x0A;
+    int command;
+
+    while (true){
+        // Clear the input buffer
+        fflush(stdin);
+
         printf("Enter commando: ");
-        scanf(command);  // Read user input from the terminal
+        scanf("%x", &command); // Read user input from the terminal
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-
-        switch (command[0])
-        {
-        case '1':
+        if (command == CMD_1){
             gpio_set_level(LEDC_OUTPUT_IO_R, HIGH);
-            printf("Turning the red light on");
-            break;
-        case '2':
+        } else if (command == CMD_2){
             gpio_set_level(LEDC_OUTPUT_IO_Y, HIGH);
-            printf("Turning the yellow light on");
-            break;
-        case '3':
+        } else if (command == CMD_3){
             gpio_set_level(LEDC_OUTPUT_IO_G, HIGH);
-            printf("Turning the green light on");
-            break;
-        case 'A':
-            printf("Turning the yellow light on blinking to signify a problem with the system");
-            break;
+        } else if (command == CMD_A){
 
-        default:
-            break;
+        } else {
+        printf("Wrong input");
         }
+
     }
 }

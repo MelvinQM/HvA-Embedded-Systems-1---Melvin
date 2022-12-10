@@ -2,7 +2,7 @@
 
 ## Stoplicht Opdracht 3
 
-## Gemaakt door: Melvin Moes, 500905603, 29-11-2022
+## Gemaakt door: Melvin Moes, 500905603
 
 ```python
 /*

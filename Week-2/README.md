@@ -2,7 +2,7 @@
 
 ## Binair Led bar teller opdracht 2
 
-## Gemaakt door: Melvin Moes, 500905603, 17-11-2022
+## Gemaakt door: Melvin Moes, 500905603
 
     /*
     Melvin Moes
@@ -72,4 +72,5 @@
 > Ze hebben allemaal een ander grondgetal namelijk decimaal(10) binair(2) hexadecimaal(16)
 
 - Beschrijf de werking van een flipflopschakeling, waarom is deze zo belangrijk voor computersystemen?
-> 
+
+> .
