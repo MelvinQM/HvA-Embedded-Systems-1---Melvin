@@ -1,6 +1,8 @@
 # ![alt text](assets/pictures/em1_markdown_header.png)
 
-## Stoplicht Commandos Opdracht 4
+## Git repository onderhouden door: Melvin Moes, 500905603
+
+## ..... Opdracht 6
 
 ## Gemaakt door: Melvin Moes, 500905603
 
@@ -8,6 +10,6 @@
 
 ```
 
-![alt text](assets/pictures/Stoplicht_commando_schema)
+![alt text]()
 
-## Week 4 vragen
+## Week 6 vragen
