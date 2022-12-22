@@ -8,6 +8,6 @@
 
 ```
 
-![alt text](assets/pictures/Stoplicht_commando_schema)
+![alt text](assets/pictures/Stoplicht_commando_schema.png)
 
 ## Week 4 vragen
