@@ -1,94 +1,96 @@
 /*
 Melvin Moes
-08-12-2022
-A code that dims and brightens 3 LED's using PWM
-https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html
+28-12-2022
+Code that received Input through UART using putty to control a traffic light
 */
 #include <stdio.h>
 #include "driver/ledc.h"
 #include "esp_err.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/uart.h"
+#include "driver/gpio.h"
 
-#define BUTTON                  (40)
+#define BUF_SIZE (1024)
 #define HIGH                    (1)
 #define LOW                     (0)
-
-#define LEDC_TIMER              LEDC_TIMER_0
-#define LEDC_MODE               LEDC_LOW_SPEED_MODE
 #define LEDC_OUTPUT_IO_R        (47)
 #define LEDC_OUTPUT_IO_Y        (21)
 #define LEDC_OUTPUT_IO_G        (20)
-#define LEDC_CHANNEL            LEDC_CHANNEL_0
-#define LEDC_DUTY_RES           LEDC_TIMER_8_BIT // Set duty resolution to 8 bits
-#define LEDC_FREQUENCY          (1000) // Frequency in Hertz. Set frequency at 1 kHz
-#define MAX_DUTY                (255)
 
-//Configures the ledc parameters
-static void example_ledc_init(void)
-{
-    // Prepare and then apply the LEDC PWM timer configuration
-    ledc_timer_config_t ledc_timer = {
-        .speed_mode       = LEDC_MODE,
-        .timer_num        = LEDC_TIMER,
-        .duty_resolution  = LEDC_DUTY_RES,
-        .freq_hz          = LEDC_FREQUENCY,  // Set output frequency at 5 kHz
-        .clk_cfg          = LEDC_AUTO_CLK
-    };
-    ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
 
-    //Making the configuration for the Orange LED
-    ledc_channel_config_t ledc_channel = {
-        .speed_mode     = LEDC_MODE,
-        .channel        = LEDC_CHANNEL,
-        .timer_sel      = LEDC_TIMER,
-        .intr_type      = LEDC_INTR_DISABLE,
-        .gpio_num       = LEDC_OUTPUT_IO_R,
-        .duty           = 0, // Set duty to 0%
-        .hpoint         = 0
-    };
-    ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
+//Function to turn all leds off
+void reset() {
+    gpio_set_level(LEDC_OUTPUT_IO_R, LOW);
+    gpio_set_level(LEDC_OUTPUT_IO_Y, LOW);
+    gpio_set_level(LEDC_OUTPUT_IO_G, LOW);
 }
 
-void reset(int LED1, int LED2, int LED3) {
-    gpio_set_level(LED1, LOW);
-    gpio_set_level(LED2, LOW);
-    gpio_set_level(LED3, LOW);
-}
+//Setups for Uart and GPIO
+void setup(){
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+    };
 
-void app_main() {
-    example_ledc_init();
-    reset(LEDC_OUTPUT_IO_R, LEDC_OUTPUT_IO_Y, LEDC_OUTPUT_IO_G);
+    uart_driver_install(UART_NUM_0, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_param_config(UART_NUM_0, &uart_config);
+    uart_set_pin(UART_NUM_0, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 
+    //GPIO setup
     gpio_set_direction(LEDC_OUTPUT_IO_R, GPIO_MODE_OUTPUT);
     gpio_set_direction(LEDC_OUTPUT_IO_Y, GPIO_MODE_OUTPUT);
     gpio_set_direction(LEDC_OUTPUT_IO_G, GPIO_MODE_OUTPUT);
+}
 
-    int CMD_1 = 0x01;
-    int CMD_2 = 0x02;
-    int CMD_3 = 0x03;
-    int CMD_A = 0x0A;
-    int command;
+void app_main() {
+    setup();
+    reset();
 
-    while (true){
-        // Clear the input buffer
-        fflush(stdin);
+    uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
 
-        printf("Enter commando: ");
-        scanf("%x", &command); // Read user input from the terminal
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        if (command == CMD_1){
-            gpio_set_level(LEDC_OUTPUT_IO_R, HIGH);
-        } else if (command == CMD_2){
-            gpio_set_level(LEDC_OUTPUT_IO_Y, HIGH);
-        } else if (command == CMD_3){
-            gpio_set_level(LEDC_OUTPUT_IO_G, HIGH);
-        } else if (command == CMD_A){
-
-        } else {
-        printf("Wrong input");
+    while (true) {
+        // Read data from the UART
+        int len = uart_read_bytes(UART_NUM_0, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
+        //Data is an array of the inputted chars
+        data[len] = '\0';
+        //If input is received execute code
+        if (len) {
+            printf("> %s\n", data);
+            //If input is 1 turn off all leds and turn on RED led same applies for the else ifs but for the other LEDs
+            if (data[0] == '1'){
+                reset();
+                printf("1 IS INPUTTED\n");
+                gpio_set_level(LEDC_OUTPUT_IO_R, HIGH);
+            } else if (data[0] == '2'){
+                reset();
+                printf("2 IS INPUTTED\n");
+                gpio_set_level(LEDC_OUTPUT_IO_Y, HIGH);     
+            } else if (data[0] == '3'){
+                reset();
+                gpio_set_level(LEDC_OUTPUT_IO_G, HIGH);
+                printf("3 IS INPUTTED\n");
+            } else if (data[0] == 'A'){
+                reset();
+                printf("A IS INPUTTED PRESS ANY KEY TO INTERRUPT\n");
+                while (true){
+                    // Read data from the UART if data is inputted interrupt the blinking of the led
+                    int len = uart_read_bytes(UART_NUM_0, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
+                    if (len) {
+                        printf("A IS INTERUPTED\n");
+                        break;
+                    }
+                    gpio_set_level(LEDC_OUTPUT_IO_Y, HIGH);
+                    vTaskDelay(500 / portTICK_PERIOD_MS);
+                    gpio_set_level(LEDC_OUTPUT_IO_Y, LOW);
+                    vTaskDelay(500 / portTICK_PERIOD_MS);
+                }
+            } else {
+            printf("Wrong input\n");
+            }
         }
-
     }
 }
