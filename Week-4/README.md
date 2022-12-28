@@ -104,6 +104,6 @@ void app_main() {
 ```
 
 ![alt text](assets/pictures/Stoplicht_commando_schema.png)
-![alt text](assets/gifs/commandos_gif.gif)
+![alt text](assets/gifs/commando_gif.gif)
 
 ## Week 4 vragen
