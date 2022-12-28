@@ -85,5 +85,5 @@ De code hierboven werkt door middel van een infinite loop met daarin een loop di
 Ik heb een if else gebruikt om te beslissen welke kant de lampjes op gaan dit bespaart wat lines aan code waardoor de delay op de lampjes minder werd. Zonder dit gingen de lampjes namelijk wat slomer heen en weer bij 0 delay. Zoals te zien in de gif hieronder kan het systeem nu erg snel heen en weer gaan. 
 
 ![alt text](assets/gifs/lightrider_gif.gif)
-
+![alt text](assets/pictures/lightrider_schema.png)
 ## Week 5 vragen
