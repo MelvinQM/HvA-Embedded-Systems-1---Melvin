@@ -1,0 +1,245 @@
+/*
+Melvin Moes
+01-01-2023
+End assignment making the game of pong using a ledbar
+*/
+#include <stdio.h>
+#include "driver/ledc.h"
+#include "esp_err.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/uart.h"
+#include "driver/gpio.h"
+
+//Defining power levels
+#define HIGH 1
+#define LOW 0
+#define STACK_SIZE 5000
+
+//Defining the button pins for the two players (The pins are the physical pins)
+#define PLAYER_ONE 38
+#define PLAYER_TWO 45
+
+//All delay variables
+#define gameloopDelay 300
+#define lifeLostBlink 250
+#define countdownDelay 500
+#define penaltyDelay 250
+
+//Defining all led pins on the ledbar and gamemechanic variables
+int LED_PIN[10] = {3, 8, 18, 17, 16, 15, 7, 6, 5, 4};
+bool slideright = true;
+int waarde = 0b000000001;
+//Variables for the status of the game
+bool pOneStatus;
+bool pTwoStatus;
+int pOneLives = 5;
+int pTwoLives = 5;
+//Boolean for the direction of the game to check which player should block the puck
+bool direction;
+
+/* Defining a data structure and defining the different instances of 
+the datastructure for both players. Using 3 and 4 for the pins because 
+array index isn't a constant.*/
+typedef struct {
+    int player;
+    int pin;
+} PlayerData;
+PlayerData player1_data = {.player = PLAYER_ONE, .pin = 3};
+PlayerData player2_data = {.player = PLAYER_TWO, .pin = 4};
+
+//Calling these functions beforehand so that the function gameplay knows what parameters it will need
+void life_display(int lives, int player);
+void move_light();
+//Function that is used to make 2 different tasks for both players
+void player(void *pvParameters) {
+    // Cast the void pointer back to a struct type.
+    PlayerData *data = (PlayerData *) pvParameters;
+    int player = data->player;
+    int pin = data->pin;
+    //Checking if the instance of this function is player one or two
+    bool isPlayerOne = false;
+    if (pin == 3){
+        isPlayerOne = true;
+    }
+    while (true){   
+        if(gpio_get_level(player)){
+            //An indicator if button is pressed
+            if (isPlayerOne){
+                pOneStatus = true;
+            } else {
+                pTwoStatus = true;
+            }
+            gpio_set_level(pin, HIGH);
+            vTaskDelay(gameloopDelay / portTICK_PERIOD_MS);
+            if (isPlayerOne){
+                pOneStatus = false;
+            } else {
+                pTwoStatus = false;
+            }
+            gpio_set_level(pin, LOW);
+            vTaskDelay(penaltyDelay / portTICK_PERIOD_MS);
+        }
+    }
+}
+void gameplay(){
+    //While both players have atleast 1 live remaining, continue game.
+    while (pOneLives >= 1 && pTwoLives >= 1){
+        if (pOneStatus){
+            printf("Player 1 Status: %d\n", pOneStatus);
+        } else if (pTwoStatus){
+            printf("Player 2 Status: %d\n", pTwoStatus);
+        }
+        for (size_t i = 0; i < 10; i++){
+            vTaskDelay(gameloopDelay / portTICK_PERIOD_MS);
+            //Deciding which way to go based on the boolean
+            if (slideright){
+                //Initial direction
+                direction = true;
+                move_light();
+                //Making sure the last led only turns on once
+                if (i < 9){
+                    waarde = waarde << 1;
+                }               
+            } else {
+                //Reverse direction boolean to indicate which direction its going
+                direction = false;
+                move_light();
+                //Making sure the last led only turns on once
+                if (i < 9){
+                    waarde = waarde >> 1;
+                }
+            }
+        }
+        /*According to the direction that is taken see which 
+        player needs to save the puck, if direction = true than its player one etc*/
+        if (direction){
+            if (pTwoStatus){
+                printf("Bounce!\n");
+            } else {
+                pTwoLives--;
+                life_display(pTwoLives, 2);
+                printf("BOOM P2 lives remaining: %d\n", pTwoLives);
+            }
+        } else {
+            if (pOneStatus){
+                printf("Bounce!\n");
+            } else {
+                pOneLives--;
+                life_display(pOneLives, 1);
+                printf("BOOM P1 lives remaining: %d\n", pOneLives);
+            }
+        }
+        //Reverse the direction
+        slideright = !slideright;
+    }
+}
+void vOtherFunction( void ){
+    //Function for making 2 different tasks for both players to run independetly the main task
+    TaskHandle_t xHandle = NULL;
+    /* Create the task, storing the handle. */
+    xTaskCreate(
+        player,             /* Function that implements the task. */
+        "Player 1 Input",   /* Text name for the task. */
+        STACK_SIZE,         /* Stack size in words, not bytes. */
+        &player1_data,      /* Parameter passed into the task. */
+        tskIDLE_PRIORITY,   /* Priority at which the task is created. */
+        &xHandle );
+    
+    xTaskCreate(
+        player,             /* Function that implements the task. */
+        "Player 2 Input",   /* Text name for the task. */
+        STACK_SIZE,         /* Stack size in words, not bytes. */
+        &player2_data,      /* Parameter passed into the task. */
+        tskIDLE_PRIORITY,   /* Priority at which the task is created. */
+        &xHandle );         /* Used to pass out the created task's handle. */
+
+    xTaskCreate(
+        gameplay,             /* Function that implements the task. */
+        "Game Loop",   /* Text name for the task. */
+        STACK_SIZE,         /* Stack size in words, not bytes. */
+        NULL,      /* Parameter passed into the task. */
+        tskIDLE_PRIORITY,   /* Priority at which the task is created. */
+        &xHandle );         /* Used to pass out the created task's handle. */
+}
+void move_light(){
+    //Code to check all 10 led's
+    for (size_t i = 0; i < 10; i++){   
+    if ((waarde >> i) & 1){
+        gpio_set_level(LED_PIN[i], HIGH);
+    } else {
+        gpio_set_level(LED_PIN[i], LOW);
+    }
+}
+}
+void life_display(int lives, int player){
+    if (player == 1){
+        for (size_t i = 0; i < 5; i++){
+            for (size_t i = 0; i < lives; i++){
+                gpio_set_level(LED_PIN[i], HIGH);
+            }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+            for (size_t i = 0; i < lives; i++){
+                gpio_set_level(LED_PIN[i], LOW);
+            }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+        }
+    } else if (player == 2){
+        for (size_t i = 0; i < 5; i++){
+            for (size_t i = 0; i < lives; i++){
+                gpio_set_level(LED_PIN[9-i], HIGH);
+                }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+            for (size_t i = 0; i < lives; i++){
+                gpio_set_level(LED_PIN[9-i], LOW);
+            }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+        }        
+    }
+    //Checking which player won
+    if (pOneLives == 0 || pTwoLives == 0){
+        printf("GAME OVER");
+        for (size_t i = 0; i < 10; i++){
+            for (size_t i = 0; i < 10; i++){
+                gpio_set_level(LED_PIN[i], HIGH);
+            }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+            for (size_t i = 0; i < 10; i++){
+                gpio_set_level(LED_PIN[i], LOW);
+            }
+            vTaskDelay(lifeLostBlink / portTICK_PERIOD_MS);
+        }
+    }
+}
+void countdown(){
+    //Function for the initial countdown to the start of the game
+    int countdown = 0b1111111111;
+    for (size_t i = 0; i < 10; i++){
+        for (size_t j = 0; j < 10; j++){   
+        if ((countdown >> j) & 1){
+            gpio_set_level(LED_PIN[j], HIGH);
+        } else {
+            gpio_set_level(LED_PIN[j], LOW);
+        } 
+    }
+    countdown = countdown >> 1;
+    vTaskDelay(countdownDelay / portTICK_PERIOD_MS);
+    } 
+    gpio_set_level(LED_PIN[0], LOW);
+    vTaskDelay(countdownDelay / portTICK_PERIOD_MS);
+}
+void setup(){
+    /*Setting the power direction for the buttons so 
+    that it can receive a signal to see if the button is pressed*/
+    gpio_set_direction(PLAYER_ONE, GPIO_MODE_INPUT);
+    gpio_set_direction(PLAYER_TWO, GPIO_MODE_INPUT);
+    //Setting the power direction for the ledbar
+    for (size_t i = 0; i < 10; i++){
+        gpio_set_direction(LED_PIN[i], GPIO_MODE_OUTPUT);
+    }
+}
+void app_main(){
+    setup();
+    countdown();
+    vOtherFunction(); 
+}
