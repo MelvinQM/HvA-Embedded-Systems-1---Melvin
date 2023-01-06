@@ -10,11 +10,15 @@ End assignment making the game of pong using a ledbar
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "driver/gpio.h"
+#include <string.h>
 
 //Defining power levels
 #define HIGH 1
 #define LOW 0
 #define STACK_SIZE 5000
+
+//Defining buffer size for uart
+#define BUF_SIZE (1024)
 
 //Defining the button pins for the two players (The pins are the physical pins)
 #define PLAYER_ONE 38
@@ -29,14 +33,19 @@ End assignment making the game of pong using a ledbar
 //Defining all led pins on the ledbar and gamemechanic variables
 int LED_PIN[10] = {3, 8, 18, 17, 16, 15, 7, 6, 5, 4};
 bool slideright = true;
+bool direction;
 int waarde = 0b000000001;
-//Variables for the status of the game
+
+
+//Variables for the status of the player
 bool pOneStatus;
 bool pTwoStatus;
 int pOneLives = 5;
 int pTwoLives = 5;
+char pOneName[BUF_SIZE];
+char pTwoName[BUF_SIZE];
+bool nameIsGiven = false;
 //Boolean for the direction of the game to check which player should block the puck
-bool direction;
 
 /* Defining a data structure and defining the different instances of 
 the datastructure for both players. Using 3 and 4 for the pins because 
@@ -51,8 +60,9 @@ PlayerData player2_data = {.player = PLAYER_TWO, .pin = 4};
 //Calling these functions beforehand so that the function gameplay knows what parameters it will need
 void life_display(int lives, int player);
 void move_light();
-//Function that is used to make 2 different tasks for both players
 void player(void *pvParameters) {
+    //Function that is used to make 2 different tasks for both players
+
     // Cast the void pointer back to a struct type.
     PlayerData *data = (PlayerData *) pvParameters;
     int player = data->player;
@@ -85,11 +95,6 @@ void player(void *pvParameters) {
 void gameplay(){
     //While both players have atleast 1 live remaining, continue game.
     while (pOneLives >= 1 && pTwoLives >= 1){
-        if (pOneStatus){
-            printf("Player 1 Status: %d\n", pOneStatus);
-        } else if (pTwoStatus){
-            printf("Player 2 Status: %d\n", pTwoStatus);
-        }
         for (size_t i = 0; i < 10; i++){
             vTaskDelay(gameloopDelay / portTICK_PERIOD_MS);
             //Deciding which way to go based on the boolean
@@ -119,7 +124,7 @@ void gameplay(){
             } else {
                 pTwoLives--;
                 life_display(pTwoLives, 2);
-                printf("BOOM P2 lives remaining: %d\n", pTwoLives);
+                printf("BOOM %s lives remaining: %d\n", pTwoName, pTwoLives);
             }
         } else {
             if (pOneStatus){
@@ -127,14 +132,14 @@ void gameplay(){
             } else {
                 pOneLives--;
                 life_display(pOneLives, 1);
-                printf("BOOM P1 lives remaining: %d\n", pOneLives);
+                printf("BOOM %s lives remaining: %d\n", pOneName, pOneLives);
             }
         }
         //Reverse the direction
         slideright = !slideright;
     }
 }
-void vOtherFunction( void ){
+void task_function( void ){
     //Function for making 2 different tasks for both players to run independetly the main task
     TaskHandle_t xHandle = NULL;
     /* Create the task, storing the handle. */
@@ -173,6 +178,7 @@ void move_light(){
 }
 }
 void life_display(int lives, int player){
+    //Parameter given through function call determines which player should show a lifelost animation
     if (player == 1){
         for (size_t i = 0; i < 5; i++){
             for (size_t i = 0; i < lives; i++){
@@ -198,7 +204,12 @@ void life_display(int lives, int player){
     }
     //Checking which player won
     if (pOneLives == 0 || pTwoLives == 0){
-        printf("GAME OVER");
+        if (pOneLives == 0){
+            printf("GAME OVER %s won!\n", pTwoName);
+        } else {
+            printf("GAME OVER %s won!\n", pOneName);
+        }
+        //Gameover animation
         for (size_t i = 0; i < 10; i++){
             for (size_t i = 0; i < 10; i++){
                 gpio_set_level(LED_PIN[i], HIGH);
@@ -212,7 +223,8 @@ void life_display(int lives, int player){
     }
 }
 void countdown(){
-    //Function for the initial countdown to the start of the game
+    /*Function for the initial countdown to the start of the game
+    It starts by turning on all led's then turning them off one by one*/
     int countdown = 0b1111111111;
     for (size_t i = 0; i < 10; i++){
         for (size_t j = 0; j < 10; j++){   
@@ -224,22 +236,79 @@ void countdown(){
     }
     countdown = countdown >> 1;
     vTaskDelay(countdownDelay / portTICK_PERIOD_MS);
-    } 
+    }
     gpio_set_level(LED_PIN[0], LOW);
     vTaskDelay(countdownDelay / portTICK_PERIOD_MS);
 }
 void setup(){
+    //Uart setup
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+    };
+
+    uart_driver_install(UART_NUM_0, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_param_config(UART_NUM_0, &uart_config);
+    uart_set_pin(UART_NUM_0, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+
     /*Setting the power direction for the buttons so 
     that it can receive a signal to see if the button is pressed*/
     gpio_set_direction(PLAYER_ONE, GPIO_MODE_INPUT);
     gpio_set_direction(PLAYER_TWO, GPIO_MODE_INPUT);
+
     //Setting the power direction for the ledbar
     for (size_t i = 0; i < 10; i++){
         gpio_set_direction(LED_PIN[i], GPIO_MODE_OUTPUT);
     }
 }
+void nameInput(char *pName){
+    uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
+    memset(data, 0, BUF_SIZE);
+    int nameLen = 0;
+    while (!nameIsGiven)
+    {
+        // Read data from the UART
+        int len = uart_read_bytes(UART_NUM_0, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
+        //Data is an array of the inputted chars
+        data[len] = '\0';
+        //If input is received execute code
+        if (len) {
+            //Display for input
+            printf("> %s\n", data);
+            //Putting the storing of the input in the else statement to prevent the enter getting added to the name
+            if (data[0] == '\r'){
+                nameIsGiven = true;
+            } else {
+                // Store the input from the UART in the pOneName char array
+                for (int i = 0; i < len; i++) {
+                    pName[nameLen] = data[i];
+                    nameLen++;
+                }
+            }
+
+        }
+    }
+
+    // Add a null terminator to the end of the pOneName char array
+    pName[nameLen] = '\0';
+
+    //Incase another name needs to be inputted make nameIsGiven false
+    nameIsGiven = false;
+}
 void app_main(){
     setup();
+
+    printf("Player 1 enter name: (press enter to confirm)\n");
+    nameInput(pOneName);
+    printf("%s\n",pOneName);
+    printf("Player 2 enter name: (press enter to confirm)\n");
+    nameInput(pTwoName);
+    printf("%s\n",pTwoName);
+
+    printf("THE GAME IS STARTING SOON GET READY\n");
     countdown();
-    vOtherFunction(); 
+    task_function(); 
 }
