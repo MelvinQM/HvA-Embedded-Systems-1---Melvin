@@ -2,11 +2,11 @@
 
 ## Git repository onderhouden door: Melvin Moes, 500905603
 
-## ..... Opdracht 6
+## Pong Eindopdracht
 
 ## Gemaakt door: Melvin Moes, 500905603
 
-For my endassignment i chose the project "Pong". The way I've done this is by using a ledbar and two buttons. Every button represents a player that tries to bounce back the light moving across the ledbar using their respective led they light up with the button. This gives the illusion that the led that lights up using the button is physically pushing back the moving led.
+For my end assignment I chose the project "Pong". The way I've done this is by using a ledbar and two buttons. Every button represents a player that tries to bounce back the light moving across the ledbar using their respective led they light up with the button. This gives the illusion that the led that lights up using the button is physically pushing back the moving led.
 
 Below are all the libraries used in the program.
 ```python
@@ -280,7 +280,6 @@ void life_display(int lives, int player){
 ```
 ![alt text](assets/gifs/life_display_gif.gif)
 
-
 Finally a function to make a countdown animationa and the input for the players name. This way it can show the scores alongside the player names. The game doesn't start until the players names have been inputted.
 ```Python
 void countdown(){
@@ -350,4 +349,5 @@ void app_main(){
     task_function(); 
 }
 ```
+![alt text](assets/gifs/nameinput_gif.gif)
 ![alt text](assets/gifs/countdown_gif.gif)
