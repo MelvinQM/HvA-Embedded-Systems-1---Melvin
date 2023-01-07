@@ -175,7 +175,7 @@ void move_light(){
     } else {
         gpio_set_level(LED_PIN[i], LOW);
     }
-}
+    }
 }
 void life_display(int lives, int player){
     //Parameter given through function call determines which player should show a lifelost animation
