@@ -25,7 +25,7 @@ int LED_PIN[10] = {3, 8, 18, 17, 16, 15, 7, 6, 5, 4};
 
 //All delay variables
 #define gameloopDelay 300
-#define lifeLostBlink 250
+#define lifeLostBlink 150
 #define countdownDelay 500
 #define penaltyDelay 250
 
@@ -40,7 +40,7 @@ bool nameIsGiven = false;
 bool slideright = true;
 bool direction;
 int waarde = 0b000000001;
-int countdown = 0b1111111111;
+
 
 /* Defining a data structure and defining the different instances of 
 the datastructure for both players. Using 3 and 4 for the pins because 
@@ -218,6 +218,7 @@ void life_display(int lives, int player){
     }
 }
 void countdown(){
+    int countdown = 0b1111111111;
     /*Function for the initial countdown to the start of the game
     It starts by turning on all led's then turning them off one by one*/
     for (size_t i = 0; i < 10; i++){
@@ -294,7 +295,8 @@ void nameInput(char *pName){
 }
 void app_main(){
     setup();
-    printf("Player 1 enter name: (press enter to confirm)\n");
+
+    printf("\nPlayer 1 enter name: (press enter to confirm)\n");
     nameInput(pOneName);
     printf("%s\n",pOneName);
     printf("Player 2 enter name: (press enter to confirm)\n");
@@ -304,4 +306,6 @@ void app_main(){
     printf("THE GAME IS STARTING SOON GET READY\n");
     countdown();
     task_function(); 
+
+
 }

@@ -335,7 +335,7 @@ void nameInput(char *pName){
 void app_main(){
     setup();
 
-    printf("Player 1 enter name: (press enter to confirm)\n");
+    printf("\nPlayer 1 enter name: (press enter to confirm)\n");
     nameInput(pOneName);
     printf("%s\n",pOneName);
     printf("Player 2 enter name: (press enter to confirm)\n");
