@@ -4,8 +4,6 @@
 
 ## Pong Eindopdracht
 
-## Gemaakt door: Melvin Moes, 500905603
-
 For my end assignment I chose the project "Pong". The way I've done this is by using a ledbar and two buttons. Every button represents a player that tries to bounce back the light moving across the ledbar using their respective led they light up with the button. This gives the illusion that the led that lights up using the button is physically pushing back the moving led.
 
 Here you can see the wiring schematic and physical wiring schematic
