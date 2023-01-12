@@ -12,17 +12,16 @@ End assignment making the game of pong using a ledbar
 #include "driver/gpio.h"
 #include <string.h>
 
-//Defining power levels
+//Defining power levels and setup variables
 #define HIGH 1
 #define LOW 0
 #define STACK_SIZE 5000
-
-//Defining buffer size for uart
 #define BUF_SIZE (1024)
 
-//Defining the button pins for the two players (The pins are the physical pins)
+//Defining the button pins for the two players and the leds(The pins are the physical pins)
 #define PLAYER_ONE 38
 #define PLAYER_TWO 45
+int LED_PIN[10] = {3, 8, 18, 17, 16, 15, 7, 6, 5, 4};
 
 //All delay variables
 #define gameloopDelay 300
@@ -30,14 +29,7 @@ End assignment making the game of pong using a ledbar
 #define countdownDelay 500
 #define penaltyDelay 250
 
-//Defining all led pins on the ledbar and gamemechanic variables
-int LED_PIN[10] = {3, 8, 18, 17, 16, 15, 7, 6, 5, 4};
-bool slideright = true;
-bool direction;
-int waarde = 0b000000001;
-
-
-//Variables for the status of the player
+//Variables for the status of the player and the game
 bool pOneStatus;
 bool pTwoStatus;
 int pOneLives = 5;
@@ -45,7 +37,10 @@ int pTwoLives = 5;
 char pOneName[BUF_SIZE];
 char pTwoName[BUF_SIZE];
 bool nameIsGiven = false;
-//Boolean for the direction of the game to check which player should block the puck
+bool slideright = true;
+bool direction;
+int waarde = 0b000000001;
+int countdown = 0b1111111111;
 
 /* Defining a data structure and defining the different instances of 
 the datastructure for both players. Using 3 and 4 for the pins because 
@@ -225,7 +220,6 @@ void life_display(int lives, int player){
 void countdown(){
     /*Function for the initial countdown to the start of the game
     It starts by turning on all led's then turning them off one by one*/
-    int countdown = 0b1111111111;
     for (size_t i = 0; i < 10; i++){
         for (size_t j = 0; j < 10; j++){   
         if ((countdown >> j) & 1){
@@ -300,7 +294,6 @@ void nameInput(char *pName){
 }
 void app_main(){
     setup();
-
     printf("Player 1 enter name: (press enter to confirm)\n");
     nameInput(pOneName);
     printf("%s\n",pOneName);
