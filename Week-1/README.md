@@ -37,8 +37,8 @@
         }  
     }
 
-![alt text](assets/pictures/hartslag.png)
-![alt text](assets/pictures/blinkie_schema.png)
+![alt text](../assets/pictures/hartslag.png)
+![alt text](../assets/pictures/blinkie_schema.png)
 
 ## Week 1 vragen
 
