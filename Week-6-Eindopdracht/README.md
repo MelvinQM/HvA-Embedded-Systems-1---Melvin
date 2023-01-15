@@ -7,8 +7,8 @@
 For my end assignment I chose the project "Pong". The way I've done this is by using a ledbar and two buttons. Every button represents a player that tries to bounce back the light moving across the ledbar using their respective led they light up with the button. This gives the illusion that the led that lights up using the button is physically pushing back the moving led.
 
 Here you can see the wiring schematic and physical wiring schematic
-![alt text](assets/pictures/pong_schema.png)
-![alt text](assets/pictures/pong_foto.png)
+![alt text](../assets/pictures/pong_schema.png)
+![alt text](../assets/pictures/pong_foto.png)
 
 Below are all the libraries used in the program.
 ```python
@@ -104,7 +104,7 @@ void player(void *pvParameters) {
     }
 }
 ```
-![alt text](assets/gifs/buttonpress_gif.gif)
+![alt text](../assets/gifs/buttonpress_gif.gif)
 
 The setup required like the gpio powerdirection, UART initialization etc
 ```python
@@ -275,7 +275,7 @@ void life_display(int lives, int player){
     }
 }
 ```
-![alt text](assets/gifs/life_display_gif.gif)
+![alt text](../assets/gifs/life_display_gif.gif)
 
 Finally a function to make a countdown animationa and the input for the players name. This way it can show the scores alongside the player names. The game doesn't start until the players names have been inputted.
 ```Python
@@ -345,5 +345,5 @@ void app_main(){
     task_function(); 
 }
 ```
-![alt text](assets/gifs/nameinput_gif.gif)
-![alt text](assets/gifs/countdown_gif.gif)
+![alt text](../assets/gifs/nameinput_gif.gif)
+![alt text](../assets/gifs/countdown_gif.gif)
