@@ -1,7 +1,5 @@
 # ![alt text](assets/pictures/em1_markdown_header.png)
 
-## Git repository onderhouden door: Melvin Moes, 500905603
-
 ### Embedded Kit
 
 Onderdeel van Embedded Systems 1 is dat je de 'Embedded Kit' aanschaft. Dit is een doosje met een verzameling van de volgende onderdelen:
