@@ -2,8 +2,6 @@
 
 ## Stoplicht Commandos Opdracht 4
 
-## Gemaakt door: Melvin Moes, 500905603
-
 ```python
 /*
 Melvin Moes
