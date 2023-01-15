@@ -2,8 +2,6 @@
 
 ## Binair Led bar teller opdracht 2
 
-## Gemaakt door: Melvin Moes, 500905603
-
     /*
     Melvin Moes
     24-11-2022
