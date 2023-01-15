@@ -1,4 +1,4 @@
-# ![alt text](assets/pictures/em1_markdown_header.png)
+# ![alt text](../assets/pictures/em1_markdown_header.png)
 
 ## Blinkie opdracht 1
 
