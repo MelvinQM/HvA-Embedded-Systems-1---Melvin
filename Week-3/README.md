@@ -64,7 +64,7 @@ void app_main() {
 
 Hier boven in de code zie je een simpele manier om een stoplicht te simuleren. Ik heb een functie aangemaakt die 1 lampje uit zet en 1 aanzet. Deze functie gebruik ik later om dan steeds precies dit te doen. Een stoplicht heeft namelijk altijd maar 1 van de lampen aan. Dus er moet er altijd weer 1 uit gaan.
 
-![alt text](assets/gifs/stoplicht_gif.gif)
-![alt text](assets/pictures/Stoplicht_schema.png)
+![alt text](../assets/gifs/stoplicht_gif.gif)
+![alt text](../assets/pictures/Stoplicht_schema.png)
 
 ## Week 3 vragen
