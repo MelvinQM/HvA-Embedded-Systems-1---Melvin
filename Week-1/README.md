@@ -2,8 +2,6 @@
 
 ## Blinkie opdracht 1
 
-## Gemaakt door: Melvin Moes, 500905603
-
     //Importing gpio drivers
     #include "freertos/FreeRTOS.h"
     #include "freertos/task.h"
