@@ -2,8 +2,6 @@
 
 ## Stoplicht Opdracht 3
 
-## Gemaakt door: Melvin Moes, 500905603
-
 ```python
 /*
 Melvin Moes
